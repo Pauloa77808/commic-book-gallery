@@ -11,7 +11,14 @@ namespace ComicBookGallery.Controllers
         // GET: ComicBooks
         public ActionResult Index()
         {
-            return View();
+
+            if (DateTime.Today.DayOfWeek != DayOfWeek.Monday)
+            {
+                return Content("Merdas");
+              //  return Redirect("/");
+            }
+
+            else return View();
         }
     }
 }
