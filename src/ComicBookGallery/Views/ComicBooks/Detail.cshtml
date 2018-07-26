@@ -33,7 +33,16 @@
 
 
     <h5>Artists:</h5>
-    <div>@Html.Raw(artists)</div>
+    <div>
+        @if(artists.Length>0){
+            <ul>
+                 @foreach (var elem in artists)
+                {
+                   <li>@elem</li>       
+                } 
+            </ul>
+        }
+    </div>
 
 </body>
 </html>
