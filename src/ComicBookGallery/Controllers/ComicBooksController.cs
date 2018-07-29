@@ -12,16 +12,14 @@ namespace ComicBookGallery.Controllers
     {
         private ComicBookRepository rp = new ComicBookRepository();
 
-        // GET: ComicBooks
-        public ActionResult Index(int? id)
-        {
 
-            if (id == null)
-            {
-                return HttpNotFound();
-            }
-            var comicBook = rp.getComicBook((int)id);
-            return View("Detail", comicBook);
+
+        // GET: ComicBooks
+        public ActionResult Index()
+        {
+            var comicBook = rp.getComicBooks();
+
+            return View(comicBook);
         }
     }
 }
