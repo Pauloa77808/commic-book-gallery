@@ -1,33 +1,27 @@
-﻿using ComicBookGallery.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ComicBookGallery.Data;
+
 
 namespace ComicBookGallery.Controllers
 {
     public class ComicBooksController : Controller
     {
+        private ComicBookRepository rp = new ComicBookRepository();
+
         // GET: ComicBooks
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
 
-            var comicBook = new ComicBook()
+            if (id == null)
             {
-
-                SeriesTitle = "The Amazing Spider-Man",
-                IssueNumber = 700,
-                DescriptionHtml = "<p>Final issue! Witness the final hours of Doctor Octopus' life and his one, last, great act of revenge! Even if Spider-Man survives... <strong>will Peter Parker?</strong></p>",
-                Artists = new Artist[] {
-                    new Artist() { Name="Dan Slott", Role="Script" },
-                    new Artist() { Name="Humberto Ramos", Role="Pencils" },
-                    new Artist() { Name="Victor Delgado", Role="Inks" },
-                    new Artist() { Name="Edgar Delgado", Role="Colors" },
-                    new Artist() { Name="Chris Eliopoulos", Role="Letters" },
-                    }
-            };
-                 return View("Detail",comicBook);
+                return HttpNotFound();
+            }
+            var comicBook = rp.getComicBook((int)id);
+            return View("Detail", comicBook);
         }
     }
 }
