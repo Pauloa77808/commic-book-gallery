@@ -21,5 +21,18 @@ namespace ComicBookGallery.Controllers
 
             return View(comicBook);
         }
+
+        public ActionResult Detail(int? id)
+        {
+
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+            var comicBook = rp.getComicBook((int)id);
+            return View(comicBook);
+        }
+
+
     }
 }
