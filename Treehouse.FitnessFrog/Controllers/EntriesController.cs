@@ -51,30 +51,72 @@ namespace Treehouse.FitnessFrog.Controllers
 
             return View(entry);
         }
+   
 
         [HttpPost]
         public ActionResult Add(Entry entry)
         {
+            
+            if(ModelState.IsValidField("Duration") && entry.Duration <=0) {
+
+                ModelState.AddModelError("Duration","The Duration Filed must be number greater than 0");
+            }
+
             if (ModelState.IsValid) {
                 _entriesRepository.AddEntry(entry);
+
+                TempData["Message"] = "Your entry was added with sucess!";
 
                 return RedirectToAction("Index");
             }
 
             ViewBag.ListDropDown = new SelectList(Data.Data.Activities, "Id", "Name");
 
-            return View(entry);
+            return View();
         }
 
 
-        public ActionResult Edit(int? id)
-        {
+        public ActionResult Edit(int? id) {
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+            Entry entryAux = _entriesRepository.GetEntry((int)id);
+
+            ViewBag.ListDropDown = new SelectList(Data.Data.Activities, "Id", "Name");
+
+            return View(entryAux);
+        }
+
+
+        [HttpPost]
+        public ActionResult Edit(Entry entry)
+        {
+            if (entry == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            if (ModelState.IsValidField("Duration") && entry.Duration <= 0)
+            {
+                ModelState.AddModelError("Duration", "The Duration Filed must be number greater than 0");
+            }
+
+            if (ModelState.IsValid)
+            {
+                _entriesRepository.UpdateEntry(entry);
+
+                TempData["Message"] = "The entry with Id " + entry.Id + " was edit with sucess!";
+
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.ListDropDown = new SelectList(Data.Data.Activities, "Id", "Name");
+
             return View();
+
         }
 
         public ActionResult Delete(int? id)
@@ -84,7 +126,13 @@ namespace Treehouse.FitnessFrog.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            return View();
+
+            _entriesRepository.DeleteEntry((int)id);
+
+            TempData["Message"] = "The Entry was deleted with sucess!";
+
+            return RedirectToAction("Index");
+
         }
     }
 }
